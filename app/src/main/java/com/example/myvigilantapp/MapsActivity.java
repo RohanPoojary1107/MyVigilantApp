@@ -17,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -25,10 +26,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import io.radar.sdk.Radar;
+import java.lang.Thread;
 
 public class MapsActivity<MainActivity> extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
@@ -56,11 +59,8 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
         mapFragment.getMapAsync(this);
         */
 
-
-
-
-
     }
+
 
     private void fetchLastLocation() {
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
@@ -96,6 +96,7 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         boolean permissionAccessFineLocationApproved =
                 (androidx.core.app.ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                         == android.content.pm.PackageManager.PERMISSION_GRANTED);
@@ -103,23 +104,20 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
                         Toast.LENGTH_LONG).show();
 
         if (permissionAccessFineLocationApproved==true) {
-            Toast.makeText(MapsActivity.this, "fine location approved",
-                    Toast.LENGTH_LONG).show();
+
 
 
             // App can access location both in the foreground and in the background.
             // Start your service that doesn't have a foreground service type
             // defined.
-            Toast.makeText(MapsActivity.this, "All Permissions Approved",
-                    Toast.LENGTH_LONG).show();
+
 
 
             Radar.trackOnce(new io.radar.sdk.Radar.RadarCallback() {
                 public void onComplete(io.radar.sdk.Radar.RadarStatus status,
                                        android.location.Location location, io.radar.sdk.model.RadarEvent[]
                                                events, io.radar.sdk.model.RadarUser user) {
-                    Toast.makeText(MapsActivity.this, "Radar Track Once",
-                            Toast.LENGTH_LONG).show();
+
                 }
             });
             Radar.startTracking();
@@ -132,6 +130,17 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
 
         }
 
+        fetchLastLocation();
+
+        updateMap(googleMap);
+
+        markLocation(43.470831, -80.541954);
+        markLocation(43.474350, -80.541690);
+
+    }
+
+    private void updateMap (GoogleMap googleMap)  {
+
         mMap = googleMap;
         float zoomLevel = 16.0f;
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
@@ -139,11 +148,11 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
         // replace coordinates with coordinates of current location when we have that figured out
         LatLng currentlocation = new LatLng(44, -81);
 
-        mMap.addMarker(new MarkerOptions().position(latLng).title("Your current location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
 
-        markLocation(43.470831, -80.541954);
-        markLocation(43.474350, -80.541690);
+
+        mMap.addMarker(new MarkerOptions().position(latLng).title("Your current location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
+
 
         /* Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
@@ -178,7 +187,7 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
         circleOptions.center(point);
 
         // Radius of the circle
-        circleOptions.radius(radius);
+        circleOptions.radius(185);
 
         // Border color of the circle
         circleOptions.strokeColor(Color.BLACK);
