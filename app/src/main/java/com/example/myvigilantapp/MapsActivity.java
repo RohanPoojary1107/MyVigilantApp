@@ -37,7 +37,8 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
     private static final int REQUEST_CODE = 101;
 
     // set radius to draw circles around event
-    private int radius = 100;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
             public void onSuccess(Location location) {
                 if (location != null){
                     currentLocation = location;
-                    Toast.makeText(getApplicationContext(), currentLocation.getLatitude()+""+currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), currentLocation.getLatitude()+""+currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
                     SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
                     supportMapFragment.getMapAsync(MapsActivity.this);
                 }
@@ -100,8 +101,7 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
         boolean permissionAccessFineLocationApproved =
                 (androidx.core.app.ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                         == android.content.pm.PackageManager.PERMISSION_GRANTED);
-                Toast.makeText(MapsActivity.this, Boolean.toString(permissionAccessFineLocationApproved),
-                        Toast.LENGTH_LONG).show();
+
 
         if (permissionAccessFineLocationApproved==true) {
 
@@ -134,8 +134,8 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
 
         updateMap(googleMap);
 
-        markLocation(43.470831, -80.541954);
-        markLocation(43.474350, -80.541690);
+        markLocation(43.4716498, -80.5407484, 65);
+        markLocation(43.4729791, -80.54010269999999, 56);
 
     }
 
@@ -146,7 +146,7 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
         // replace coordinates with coordinates of current location when we have that figured out
-        LatLng currentlocation = new LatLng(44, -81);
+
 
 
 
@@ -173,12 +173,12 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
 
     }
 
-    private void markLocation(double x, double y){
+    private void markLocation(double x, double y, int radius){
         LatLng newLocation = new LatLng(x, y);
         mMap.addMarker(new MarkerOptions().position(newLocation).title("Police Reported Incident"));
-        drawCircle(new LatLng(x, y));
+        drawCircle(new LatLng(x, y), radius);
     }
-    private void drawCircle(LatLng point){
+    private void drawCircle(LatLng point, int radius){
 
         // Instantiating CircleOptions to draw a circle around the marker
         CircleOptions circleOptions = new CircleOptions();
@@ -187,13 +187,13 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
         circleOptions.center(point);
 
         // Radius of the circle
-        circleOptions.radius(185);
+        circleOptions.radius(radius);
 
         // Border color of the circle
         circleOptions.strokeColor(Color.BLACK);
 
         // Fill color of the circle
-        circleOptions.fillColor(0x30ff0000);
+        circleOptions.fillColor(0x20fbbb3A);
 
         // Border width of the circle
         circleOptions.strokeWidth(2);
