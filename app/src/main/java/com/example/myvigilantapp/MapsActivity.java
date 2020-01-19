@@ -150,7 +150,7 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
 
         updateMap(googleMap);
 
-        markLocation(43.4716498, -80.5407484, 65);
+        markLocation(43.4706268, -80.5434259, 109);
         markLocation(43.4729791, -80.54010269999999, 56);
 
     }
