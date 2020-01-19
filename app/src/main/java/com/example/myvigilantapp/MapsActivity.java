@@ -5,6 +5,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -22,11 +29,15 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import io.radar.sdk.Radar;
 import java.lang.Thread;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapsActivity<MainActivity> extends FragmentActivity implements OnMapReadyCallback {
 
@@ -35,8 +46,11 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
+    NotificationManager NM;
 
     // set radius to draw circles around event
+
+    boolean first = true;
 
 
 
@@ -59,6 +73,8 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         */
+
+        onBackPressed();
 
     }
 
@@ -141,18 +157,40 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
 
     private void updateMap (GoogleMap googleMap)  {
 
+
         mMap = googleMap;
-        float zoomLevel = 16.0f;
+
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
         // replace coordinates with coordinates of current location when we have that figured out
 
-
-
-
         mMap.addMarker(new MarkerOptions().position(latLng).title("Your current location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
+        if (first) {
 
+            float zoomLevel = 16.0f;
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
+
+            first = false;
+
+        }
+
+
+
+        List<LatLng> points = new ArrayList<>();
+        points.add(new LatLng(43.472428, -80.540136));
+        points.add(new LatLng(43.473207, -80.540683));
+        points.add(new LatLng(43.473374, -80.540144));
+        points.add(new LatLng(43.472652, -80.539481));
+
+        boolean contain = (latLng.latitude != latLng.longitude);
+
+
+        if(contain == true){
+            /// do something
+        } else {
+
+        }
 
         /* Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
@@ -201,5 +239,57 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
         // Adding the circle to the GoogleMap
         mMap.addCircle(circleOptions);
 
+    }
+    public void onBackPressed()
+    {
+
+        // Create the object of
+        // AlertDialog Builder class
+        AlertDialog.Builder builder
+                = new AlertDialog
+                .Builder(MapsActivity.this);
+
+        // Set the message show for the Alert time
+        builder.setMessage("You are entering a police marked area!");
+
+        // Set Alert Title
+        builder.setTitle("Caution!");
+
+        // Set Cancelable false
+        // for when the user clicks on the outside
+        // the Dialog Box then it will remain show
+        builder.setCancelable(false);
+
+        // Set the positive button with yes name
+        // OnClickListener method is use of
+        // DialogInterface interface.
+
+        builder
+                .setPositiveButton(
+                        "Acknowledge",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which)
+                            {
+
+                                // When the user click yes button
+                                // then app will close
+
+                            }
+                        });
+
+        // Set the Negative button with No name
+        // OnClickListener method is use
+        // of DialogInterface interface.
+
+
+        // Create the Alert dialog
+        AlertDialog alertDialog = builder.create();
+
+        // Show the Alert Dialog box
+        alertDialog.show();
     }
 }
