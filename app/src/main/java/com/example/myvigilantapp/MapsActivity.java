@@ -40,59 +40,25 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        fetchLastLocation();
-        /*
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
         Toast.makeText(MapsActivity.this, "firebase connection success",
                 Toast.LENGTH_LONG).show();
         Radar.initialize("prj_test_pk_a61e4af4a3bd1e806a74126fb081873392d46d37");
+        Toast.makeText(MapsActivity.this, "Radar Initialized",
+                Toast.LENGTH_LONG).show();
 
+        setContentView(R.layout.activity_maps);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fetchLastLocation();
 
-        boolean permissionAccessFineLocationApproved =
-                androidx.core.app.ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-                        == android.content.pm.PackageManager.PERMISSION_GRANTED;
-
-        if (permissionAccessFineLocationApproved) {
-            boolean backgroundLocationPermissionApproved =
-                    androidx.core.app.ActivityCompat.checkSelfPermission(this,
-                            android.Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                            == android.content.pm.PackageManager.PERMISSION_GRANTED;
-
-            if (backgroundLocationPermissionApproved) {
-                // App can access location both in the foreground and in the background.
-                // Start your service that doesn't have a foreground service type
-                // defined.
-
-
-                Radar.trackOnce(new io.radar.sdk.Radar.RadarCallback() {
-                    public void onComplete(io.radar.sdk.Radar.RadarStatus status,
-                                           android.location.Location location, io.radar.sdk.model.RadarEvent[]
-                                                   events, io.radar.sdk.model.RadarUser user) {
-                        // do something with status, location, events, user
-                    }
-                });
-                Radar.startTracking();
-
-
-            } else {
-                // App can only access location in the foreground. Display a dialog
-                // warning the user that your app must have all-the-time access to
-                // location in order to function properly. Then, request background
-                // location.
-
-            }
-        } else {
-            // App doesn't have access to the device's location at all. Make full request
-            // for permission.
-
-        }
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        /*SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
         */
+
+
+
+
 
     }
 
@@ -130,6 +96,42 @@ public class MapsActivity<MainActivity> extends FragmentActivity implements OnMa
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        boolean permissionAccessFineLocationApproved =
+                (androidx.core.app.ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                        == android.content.pm.PackageManager.PERMISSION_GRANTED);
+                Toast.makeText(MapsActivity.this, Boolean.toString(permissionAccessFineLocationApproved),
+                        Toast.LENGTH_LONG).show();
+
+        if (permissionAccessFineLocationApproved==true) {
+            Toast.makeText(MapsActivity.this, "fine location approved",
+                    Toast.LENGTH_LONG).show();
+
+
+            // App can access location both in the foreground and in the background.
+            // Start your service that doesn't have a foreground service type
+            // defined.
+            Toast.makeText(MapsActivity.this, "All Permissions Approved",
+                    Toast.LENGTH_LONG).show();
+
+
+            Radar.trackOnce(new io.radar.sdk.Radar.RadarCallback() {
+                public void onComplete(io.radar.sdk.Radar.RadarStatus status,
+                                       android.location.Location location, io.radar.sdk.model.RadarEvent[]
+                                               events, io.radar.sdk.model.RadarUser user) {
+                    Toast.makeText(MapsActivity.this, "Radar Track Once",
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+            Radar.startTracking();
+
+
+
+        } else {
+            // App doesn't have access to the device's location at all. Make full request
+            // for permission.
+
+        }
+
         mMap = googleMap;
         float zoomLevel = 16.0f;
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
