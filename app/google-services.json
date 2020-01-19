@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1004609812597",
+    "firebase_url": "https://myvigilantapp-af0cb.firebaseio.com",
+    "project_id": "myvigilantapp-af0cb",
+    "storage_bucket": "myvigilantapp-af0cb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004609812597:android:152d4d26ad41b71c9ca03c",
+        "android_client_info": {
+          "package_name": "com.example.myvigilantapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004609812597-1puv98o9shoef9is2ec1rneud78q60m3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myvigilantapp",
+            "certificate_hash": "d5479b129363ad26d4fc3528b2a62a9e09234bbc"
+          }
+        },
+        {
+          "client_id": "1004609812597-03agsajd97uqpun3uro9mi1tpo5c6cpm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWkax3A4RpMZKF9Ar7Gv6J7L0zuCmOCUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004609812597-03agsajd97uqpun3uro9mi1tpo5c6cpm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
